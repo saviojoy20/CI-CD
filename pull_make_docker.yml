@@ -1,0 +1,40 @@
+---
+- name: "ansible code to clone code from git hub account, make docker image and push to docker hub"
+  hosts: localhost
+  become: true
+  vars: 
+    clone_dir: /var/image_a
+    git_repo: https://github.com/saviojoy20/flask-cicd-sample.git 
+    
+  tasks:
+
+     - name: creating directory
+       file: 
+          path: "{{clone_dir}}"
+          state: directory
+     - name: "pulling file from source"
+       git:
+          repo: "{{git_repo}}"
+          dest: "{{clone_dir}}"
+       register: gitreplay
+     - name : "printing git replay information" 
+       debug:
+          var: gitreplay 
+     - name: Log into DockerHub
+       docker_login:
+          email: 'saviojoy20@gmail.com'
+          username: saviojoyk
+          password: 'Creative@1234'
+     - name: creating docker image and publish to docker hub
+       when: gitreplay.changed == true
+       docker_image: 
+          name: saviojoyk/fapp
+          tag : latest
+          path: "{{clone_dir}}"
+          state: present
+          push: yes
+     - name: Removing  image file
+       docker_image:
+         state: absent
+         name: saviojoyk/fapp
+         tag: latest

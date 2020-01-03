@@ -1,0 +1,20 @@
+---
+- name: deploy new docker image
+  become: true
+  hosts: localhost
+  tasks: 
+
+
+     
+    - name: pulling docker image and running container
+      docker_container:
+          name: fapp
+          image: saviojoyk/fapp:latest
+          ports: 8080:8080
+          recreate: true
+          pull: yes
+      register: out
+
+    - debug:
+          var: out
+       
