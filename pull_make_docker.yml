@@ -24,7 +24,7 @@
        docker_login:
           email: 'saviojoy20@gmail.com'
           username: saviojoyk
-          password: 'Creative@1234'
+          password: 'Yourpassword'
      - name: creating docker image and publish to docker hub
        when: gitreplay.changed == true
        docker_image: 
